@@ -1,0 +1,238 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-blush: #F8DCE5;
+    --color-cream: #FFF8ED;
+    --color-soft-ivory: #FFFDF8;
+    --color-dusty-rose: #C77D91;
+    --color-rose: #A64D68;
+    --color-deep-rose: #A64D68;
+    --color-dark-plum: #5A3545;
+    --color-muted-taupe: #9A817B;
+    --color-soft-white: #FFFCF8;
+    --color-fine-border: rgba(166, 77, 104, 0.18);
+
+    /* Exact physical handwriting & ruled-paper geometry */
+    --letter-line-height: 2.375rem; /* 38px on desktop */
+    --letter-baseline-offset: 1.5625rem; /* 25px: exactly under font baseline */
+    --letter-font-size: 1.35rem; /* 21.6px: elegant fine-tip pen size */
+    --letter-ink-color: #2B1D24; /* Warm dark walnut fountain-pen ink */
+    --letter-rule-color: rgba(166, 77, 104, 0.125);
+    --letter-margin-color: rgba(166, 77, 104, 0.16);
+  }
+
+  @media (max-width: 640px) {
+    :root {
+      --letter-line-height: 2.125rem; /* 34px on mobile */
+      --letter-baseline-offset: 1.375rem; /* 22px on mobile */
+      --letter-font-size: 1.18rem; /* 18.9px on mobile */
+    }
+  }
+
+  body {
+    background-color: #FFF8ED;
+    color: #5A3545;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+}
+
+.font-heading {
+  font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
+}
+
+.font-serif {
+  font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
+}
+
+.font-letter {
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+}
+
+.font-handwriting {
+  font-family: 'Marck Script', 'Cedarville Cursive', 'Caveat', cursive, sans-serif;
+}
+
+/* Primary handwritten cursive penmanship for love letter pages */
+.font-handwritten-letter {
+  font-family: 'Marck Script', 'Cedarville Cursive', 'Kalam', 'Caveat', cursive, sans-serif;
+  color: var(--letter-ink-color);
+  font-size: var(--letter-font-size);
+  line-height: var(--letter-line-height);
+  letter-spacing: 0.012em;
+  word-spacing: 0.04em;
+  text-shadow: 0 0.15px 0.3px rgba(43, 29, 36, 0.22);
+  text-rendering: optimizeLegibility;
+}
+
+/* Authentic handwritten Devanagari & Hindi prayer font */
+.font-handwritten-hindi {
+  font-family: 'Kalam', 'Marck Script', cursive, sans-serif;
+  color: var(--letter-ink-color);
+  font-size: calc(var(--letter-font-size) * 0.98);
+  line-height: var(--letter-line-height);
+  text-shadow: 0 0.15px 0.3px rgba(43, 29, 36, 0.22);
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Authentic physical parchment paper: warm ivory with subtle cotton fiber grain and edge depth */
+.vintage-parchment-paper {
+  background-color: #FFFDF8;
+  background-image: 
+    radial-gradient(circle at 12% 18%, rgba(215, 185, 150, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 88% 82%, rgba(166, 77, 104, 0.04) 0%, transparent 50%),
+    linear-gradient(to right, rgba(90, 53, 69, 0.07) 0%, rgba(90, 53, 69, 0.02) 20px, transparent 44px);
+  box-shadow: 
+    inset 0 0 45px rgba(210, 185, 160, 0.09),
+    inset 0 0 10px rgba(166, 77, 104, 0.03),
+    0 4px 18px rgba(90, 53, 69, 0.07),
+    0 22px 50px rgba(90, 53, 69, 0.09);
+  border: 1px solid rgba(235, 210, 220, 0.88);
+}
+
+/* Subtle, tasteful stationery background */
+.paper-pattern {
+  background-color: #FFFDF9;
+  background-image: 
+    radial-gradient(circle at 50% 25%, rgba(248, 220, 229, 0.35) 0%, transparent 65%),
+    radial-gradient(rgba(166, 77, 104, 0.04) 0.75px, transparent 0.75px);
+  background-size: 100% 100%, 56px 56px;
+  background-position: 0 0, 28px 28px;
+}
+
+/* Strict baseline-locked horizontal ruled lines across the letter writing surface */
+.paper-ruled {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent calc(var(--letter-baseline-offset) - 1px),
+    var(--letter-rule-color) calc(var(--letter-baseline-offset) - 1px),
+    var(--letter-rule-color) var(--letter-baseline-offset),
+    transparent var(--letter-baseline-offset),
+    transparent var(--letter-line-height)
+  );
+  background-size: 100% var(--letter-line-height);
+  background-position: 0 0;
+  line-height: var(--letter-line-height);
+}
+
+/* Stationery red/blush vertical guide rule */
+.stationery-vertical-margin {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 2rem;
+  width: 1.5px;
+  background-color: var(--letter-margin-color);
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .stationery-vertical-margin {
+    left: 2.75rem;
+  }
+}
+
+/* Progressive pen writing reveal animation */
+@keyframes penInkFlow {
+  0% {
+    opacity: 0.12;
+    filter: blur(1.5px);
+    transform: translateY(3px);
+  }
+  60% {
+    opacity: 0.88;
+    filter: blur(0.3px);
+    transform: translateY(0.5px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.animate-pen-write {
+  animation: penInkFlow 0.65s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* Custom heart animations for Reel Like button */
+@keyframes floatUpHeart {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.15);
+  }
+  80% {
+    opacity: 0.9;
+    transform: translateY(-38px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-52px) scale(0.8);
+  }
+}
+
+@keyframes heartPop {
+  0% {
+    transform: scale(0.85);
+  }
+  45% {
+    transform: scale(1.3);
+  }
+  80% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.animate-heart-pop {
+  animation: heartPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+/* Custom scrollbar for notes and diary */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFF8ED;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E2A9B8;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A64D68;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-pen-write {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}

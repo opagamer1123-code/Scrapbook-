@@ -1,0 +1,90 @@
+{
+  "entities": {
+    "ProposalResponse": {
+      "title": "ProposalResponse",
+      "description": "Ekta's proposal response selection and love diary answer",
+      "type": "object",
+      "properties": {
+        "submissionRef": {
+          "type": "string",
+          "description": "Unique reference ID for this submission",
+          "maxLength": 128
+        },
+        "proposalChoice": {
+          "type": "string",
+          "description": "The selected proposal response option",
+          "maxLength": 256
+        },
+        "marriageAnswer": {
+          "type": "string",
+          "description": "Ekta's answer to the universe marriage question",
+          "maxLength": 10000
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO timestamp of when the submission occurred",
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the proposal submission and notification",
+          "maxLength": 64
+        },
+        "mailDocId": {
+          "type": "string",
+          "description": "Document ID of the queued email in /mail collection",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO timestamp of record creation",
+          "maxLength": 64
+        }
+      },
+      "required": ["submissionRef", "proposalChoice", "submittedAt"]
+    },
+    "MailNotification": {
+      "title": "MailNotification",
+      "description": "Outbox document consumed by the Firebase Trigger Email extension",
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "string",
+          "description": "Recipient email address for owner notifications",
+          "maxLength": 320
+        },
+        "submissionRef": {
+          "type": "string",
+          "description": "Reference ID connecting this email to the proposal response",
+          "maxLength": 128
+        },
+        "message": {
+          "type": "object",
+          "description": "Email payload containing subject, text, and html templates"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when email was queued",
+          "maxLength": 64
+        },
+        "isTest": {
+          "type": "boolean",
+          "description": "Whether this is a diagnostic test email"
+        }
+      },
+      "required": ["to", "message"]
+    }
+  },
+  "firestore": {
+    "/proposal_responses/{responseId}": {
+      "schema": "ProposalResponse",
+      "description": "Secure storage of proposal responses"
+    },
+    "/mail/{mailId}": {
+      "schema": "MailNotification",
+      "description": "Trigger Email extension mail queue"
+    }
+  }
+}

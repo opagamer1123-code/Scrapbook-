@@ -1,0 +1,78 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net: Default deny everything
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwnerAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'opagamer1123@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidProposalResponse(data) {
+      return data.keys().hasAll(['submissionRef', 'proposalChoice', 'submittedAt']) &&
+        data.keys().hasOnly(['submissionRef', 'proposalChoice', 'submittedAt', 'marriageAnswer', 'status', 'createdAt', 'clientSessionId', 'mailDocId']) &&
+        data.submissionRef is string && data.submissionRef.size() <= 128 &&
+        data.proposalChoice is string && data.proposalChoice.size() <= 256 &&
+        data.submittedAt is string && data.submittedAt.size() <= 64 &&
+        (!('marriageAnswer' in data) || (data.marriageAnswer is string && data.marriageAnswer.size() <= 10000)) &&
+        (!('mailDocId' in data) || (data.mailDocId is string && data.mailDocId.size() <= 128)) &&
+        (!('status' in data) || (data.status is string && data.status.size() <= 64)) &&
+        (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 64));
+    }
+
+    function isValidMailDoc(data) {
+      return data.keys().hasAll(['to', 'message']) &&
+        data.keys().hasOnly(['to', 'message', 'submissionRef', 'createdAt', 'isTest']) &&
+        data.to is string && data.to.size() <= 320 &&
+        data.message is map &&
+        data.message.keys().hasAll(['subject']) &&
+        (!('submissionRef' in data) || (data.submissionRef is string && data.submissionRef.size() <= 128));
+    }
+
+    // Proposal Responses collection:
+    // Only the website owner can read submissions to maintain complete privacy.
+    // Allow create & update with strict schema validation to allow proposal submissions.
+    match /proposal_responses/{responseId} {
+      allow read: if isOwnerAdmin();
+      allow create, update: if isValidId(responseId) && isValidProposalResponse(request.resource.data);
+      allow delete: if isOwnerAdmin();
+    }
+
+    // Mail queue collection for Firebase Trigger Email extension:
+    // Only the Trigger Email backend extension and admin can read/manage the mail queue.
+    match /mail/{mailId} {
+      allow read: if isOwnerAdmin();
+      allow create, update: if isValidId(mailId) && isValidMailDoc(request.resource.data);
+      allow delete: if isOwnerAdmin();
+    }
+
+    // Reel likes collection:
+    // Allows recording Ekta's likes on reels while protecting owner privacy
+    match /reel_likes/{likeId} {
+      allow read: if true;
+      allow create, update: if isValidId(likeId);
+      allow delete: if isOwnerAdmin();
+    }
+
+    // Admins collection (optional RBAC lookup)
+    match /admins/{adminId} {
+      allow read: if isOwnerAdmin();
+      allow write: if false;
+    }
+  }
+}

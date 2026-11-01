@@ -1,0 +1,6 @@
+{
+  "name": "For Ekta, With Love ♡",
+  "description": "An intimate, romantic proposal website and personal scrapbook love diary for Ekta featuring an animated envelope, heartfelt letter, background music, notes to share, little things I admire, and confession.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
